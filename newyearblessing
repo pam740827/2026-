@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美玲老師 2026 新年快樂！</title>
+    <style>
+        /* 保持原本的 CSS 樣式，這裡省略重複部分以節省版面，請使用上一版的 CSS */
+        /* 為方便複製，我將核心 CSS 保留在這裡 */
+        :root { --primary-color: #ff6b6b; --secondary-color: #feca57; --bg-color: #fff0f0; --card-bg: #ffffff; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2); border: 2px solid var(--primary-color); }
+        h1 { color: var(--primary-color); margin: 0; font-size: 2.5em; }
+        .input-section { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], textarea, input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { background-color: var(--primary-color); color: white; border: none; padding: 12px 25px; font-size: 1.1em; border-radius: 50px; cursor: pointer; width: 100%; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .wall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 15px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid var(--secondary-color); }
+        .card img, .card video { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+        .card-name { font-weight: bold; color: var(--primary-color); margin-bottom: 5px; }
+        .card-text { font-size: 0.95em; line-height: 1.5; color: #444; white-space: pre-wrap; }
+        .timestamp { font-size: 0.8em; color: #999; margin-top: 10px; text-align: right; }
+        
+        /* Loading 動畫 */
+        .loading { text-align: center; display: none; margin-bottom: 15px; color: var(--primary-color); font-weight: bold;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🎉 美玲老師 2026 新年快樂！</h1>
+        <p>親愛的同學們與家長，請在這裡留下給老師的祝福 ❤️</p>
+    </header>
+
+    <div class="input-section">
+        <div class="form-group">
+            <label>我是誰 (學生或家長姓名)</label>
+            <input type="text" id="nameInput" placeholder="例如：小明媽媽 / 203班 王小美">
+        </div>
+        <div class="form-group">
+            <label>祝福的話</label>
+            <textarea id="messageInput" rows="3" placeholder="老師新年快樂，謝謝您的教導..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>上傳照片或影片 (選填，影片請勿超過 10MB 以免傳輸過久)</label>
+            <input type="file" id="fileInput" accept="image/*,video/*">
+        </div>
+        <div id="loadingText" class="loading">正在上傳中，請稍候... 🚀</div>
+        <button id="submitBtn">發送祝福</button>
+    </div>
+
+    <div id="blessingWall" class="wall-grid">
+        <p style="text-align:center; width:100%; color:#999;">載入祝福中...</p>
+    </div>
+</div>
+
+<script type="module">
+    // 1. 引入必要的 Firebase 函式庫
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+    // 2. 設定 Firebase Config
+    // 🔥🔥 請將你的 firebaseConfig 貼在下面取代這個區塊 🔥🔥
+    const firebaseConfig = {
+        apiKey: "你的_API_KEY",
+        authDomain: "你的專案ID.firebaseapp.com",
+        projectId: "你的專案ID",
+        storageBucket: "你的專案ID.appspot.com",
+        messagingSenderId: "你的SenderID",
+        appId: "你的AppID"
+    };
+    // 🔥🔥 結束 🔥🔥
+
+    // 3. 初始化 Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const wallDiv = document.getElementById('blessingWall');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingText = document.getElementById('loadingText');
+
+    // 4. 即時監聽資料庫變化 (Read)
+    const q = query(collection(db, "blessings"), orderBy("timestamp", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
+        wallDiv.innerHTML = ""; // 清空目前顯示
+        if (snapshot.empty) {
+            wallDiv.innerHTML = '<p style="text-align:center; width:100%; color:#999;">目前還沒有祝福，搶頭香吧！</p>';
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            renderCard(data);
+        });
+    });
+
+    // 5. 渲染卡片函數
+    function renderCard(data) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let mediaHtml = '';
+        if (data.fileUrl) {
+            if (data.fileType && data.fileType.startsWith('video')) {
+                mediaHtml = `<video src="${data.fileUrl}" controls></video>`;
+            } else {
+                mediaHtml = `<img src="${data.fileUrl}" alt="祝福圖片">`;
+            }
+        }
+
+        // 轉換時間戳記
+        let dateStr = "剛剛";
+        if (data.timestamp) {
+            dateStr = new Date(data.timestamp.seconds * 1000).toLocaleString();
+        }
+
+        card.innerHTML = `
+            ${mediaHtml}
+            <div class="card-name">${escapeHtml(data.name)}</div>
+            <div class="card-text">${escapeHtml(data.message)}</div>
+            <div class="timestamp">${dateStr}</div>
+        `;
+        wallDiv.appendChild(card);
+    }
+
+    // 6. 處理發送祝福 (Create + Upload)
+    submitBtn.addEventListener('click', async () => {
+        const name = document.getElementById('nameInput').value;
+        const message = document.getElementById('messageInput').value;
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+
+        if (name.trim() === "" || message.trim() === "") {
+            alert("請填寫名字和祝福內容喔！");
+            return;
+        }
+
+        // UI 進入載入狀態
+        submitBtn.disabled = true;
+        submitBtn.innerText = "處理中...";
+        loadingText.style.display = "block";
+
+        try {
+            let fileUrl = "";
+            let fileType = "";
+
+            // 如果有檔案，先上傳到 Storage
+            if (file) {
+                const storageRef = ref(storage, 'blessings/' + Date.now() + '_' + file.name);
+                const snapshot = await uploadBytes(storageRef, file);
+                fileUrl = await getDownloadURL(snapshot.ref);
+                fileType = file.type;
+            }
+
+            // 寫入資料庫
+            await addDoc(collection(db, "blessings"), {
+                name: name,
+                message: message,
+                fileUrl: fileUrl,
+                fileType: fileType,
+                timestamp: serverTimestamp()
+            });
+
+            // 重置表單
+            document.getElementById('nameInput').value = '';
+            document.getElementById('messageInput').value = '';
+            document.getElementById('fileInput').value = '';
+            alert("祝福發送成功！");
+
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            alert("發送失敗，請稍後再試。(" + e.message + ")");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "發送祝福";
+            loadingText.style.display = "none";
+        }
+    });
+
+    // 防 XSS 攻擊
+    function escapeHtml(text) {
+        if (!text) return "";
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+
+</body>
+</html>
