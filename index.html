@@ -399,6 +399,18 @@
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
+// === 老師專屬模式 (隱藏輸入框) ===
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'teacher') {
+        // 1. 隱藏輸入區塊
+        document.querySelector('.input-section').style.display = 'none';
+        
+        // 2. 修改副標題，讓語氣更對
+        document.querySelector('.subtitle').innerText = '💖 老師新年快樂！這是大家對您滿滿的愛與感謝 💖';
+        
+        // 3. 移除標題的邊框和陰影，讓畫面更乾淨 (選用)
+        document.querySelector('header').style.marginBottom = '20px';
+    }
 </script>
 
 </body>
