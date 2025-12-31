@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美玲老師 2026 新年快樂！</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 2026 馬年新春配色 */
+            --primary-red: #d32f2f;       /* 深喜氣紅 */
+            --bright-red: #ff4d4f;        /* 亮紅 */
+            --gold-yellow: #ffc107;       /* 富貴金 */
+            --cream-bg: #fff8e1;          /* 溫暖米黃背景 */
+            --paper-color: #fffef8;       /* 卡片紙張色 */
+            --text-color: #4a2c2c;        /* 深咖啡文字(比純黑柔和) */
+            --board-border: #8d6e63;      /* 佈告欄邊框色 */
+        }
+
+        body {
+            font-family: 'Nunito', 'Noto Sans TC', "Microsoft JhengHei", sans-serif;
+            /* 背景改成溫暖的漸層，有點像教室的軟木塞佈告欄 */
+            background: linear-gradient(135deg, var(--cream-bg) 0%, #ffecb3 100%);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            min-height: 100vh;
+            /* 加入一點點可愛的背景紋理 (選擇性) */
+            background-image: radial-gradient(var(--gold-yellow) 10%, transparent 10%),
+                              radial-gradient(var(--bright-red) 10%, transparent 10%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-blend-mode: soft-light;
+            opacity: 0.98;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.6); /* 半透明白色襯底 */
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(211, 47, 47, 0.2);
+            border: 5px dashed var(--board-border); /* 像縫線一樣的邊框 */
+        }
+
+        /* === 標題區大改造 === */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            /* 改成大紅橫幅樣式 */
+            background: linear-gradient(to right, var(--primary-red), var(--bright-red));
+            padding: 40px 20px;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.4);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 標題裝飾小元素 */
+        header::before, header::after {
+            content: '🏮';
+            font-size: 3em;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: swing 3s infinite ease-in-out;
+        }
+        header::before { left: 20px; }
+        header::after { right: 20px; }
+        
+        @keyframes swing { 0%, 100% { transform: translateY(-50%) rotate(5deg); } 50% { transform: translateY(-50%) rotate(-5deg); }}
+
+        h1 {
+            color: var(--gold-yellow); /* 金色標題 */
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header-icons {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #ffcccc;
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* === 輸入區域改造 (像張便條紙) === */
+        .input-section {
+            background: var(--paper-color);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+            border: 3px solid var(--gold-yellow);
+            position: relative;
+        }
+        /* 加個可愛的圖釘裝飾 */
+        .input-section::after {
+            content: '📌';
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 2em;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-red);
+            font-size: 1.1em;
+        }
+
+        input[type="text"], textarea, input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffd1d1;
+            border-radius: 15px; /* 更圓的角 */
+            box-sizing: border-box;
+            font-size: 1em;
+            background-color: #fffbfc;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold-yellow);
+        }
+
+        /* === 按鈕改造 (像顆金元寶糖果) === */
+        button {
+            background: linear-gradient(to bottom, #ffecb3, var(--gold-yellow));
+            color: var(--text-color);
+            border: 3px solid #fff;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 6px 15px rgba(255, 193, 7, 0.5);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.6);
+            background: linear-gradient(to bottom, #fff5d7, #ffca28);
+        }
+        
+        button:disabled {
+            background: #e0e0e0; color: #999; border-color: #ccc; box-shadow: none; cursor: not-allowed; transform: none;
+        }
+
+        /* === 留言牆區域 === */
+        .wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+            padding: 10px;
+        }
+
+        /* === 卡片大改造 (可愛小紅包風格) === */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            break-inside: avoid;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            position: relative;
+            overflow: visible; /* 讓裝飾突出去 */
+        }
+        
+        /* 卡片頂部的裝飾條 (像紅包封口) */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 15px;
+            background: repeating-linear-gradient(45deg, var(--primary-red), var(--primary-red) 10px, var(--bright-red) 10px, var(--bright-red) 20px);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .card:hover {
+            /* 滑鼠移上去會俏皮地歪頭 */
+            transform: translateY(-8px) rotate(2deg);
+            box-shadow: 8px 8px 25px rgba(211, 47, 47, 0.2);
+        }
+        
+        /* 偶數卡片往另一邊歪 */
+        .card:nth-child(even):hover {
+            transform: translateY(-8px) rotate(-2deg);
+        }
+
+        .card img, .card video {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-top: 15px; /* 避開頂部裝飾 */
+        }
+
+        .card-name {
+            font-weight: 800;
+            color: var(--primary-red);
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            margin-top: 15px; /* 避開頂部裝飾 */
+        }
+        /* 名字前加個小圖示 */
+        .card-name::before {
+            content: '🎓 '; 
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        .card-text {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #553333;
+            white-space: pre-wrap;
+            background-color: #fffbf0; /* 文字區塊底色 */
+            padding: 12px;
+            border-radius: 12px;
+        }
+        
+        .timestamp {
+            font-size: 0.85em;
+            color: #bbaaaa;
+            margin-top: 12px;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .loading {
+            text-align: center;
+            display: none;
+            margin-bottom: 15px;
+            color: var(--primary-red);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        /* 響應式調整 */
+        @media (max-width: 600px) {
+            header { padding: 30px 15px; }
+            header::before, header::after { display: none; /* 手機版隱藏兩側燈籠以免太擠 */ }
+            h1 { font-size: 2em; }
+            .container { padding: 15px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-icons">👩‍🏫🏫🧧👧👦🐎</div>
+        <h1>美玲老師 2026 新年快樂！</h1>
+        <p class="subtitle">🐍 辭舊歲，🐎 迎新春！親愛的同學們與家長，一起來蓋祝福樓！</p>
+    </header>
+
+    <div class="input-section">
+        <div class="form-group">
+            <label>✏️ 我是誰 (學生或家長姓名)</label>
+            <input type="text" id="nameInput" placeholder="例如：小明媽媽 / 203班 王小美">
+        </div>
+        <div class="form-group">
+            <label>🧧 寫下暖心祝福</label>
+            <textarea id="messageInput" rows="3" placeholder="老師新年快樂，祝您2026馬到成功，身體健康..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>📸 上傳照片或影片 (選填，分享歡樂瞬間)</label>
+            <input type="file" id="fileInput" accept="image/*,video/*">
+        </div>
+        <div id="loadingText" class="loading">🚀 祝福正在快馬加鞭傳送中...</div>
+        <button id="submitBtn">✨ 發送新年祝福 ✨</button>
+    </div>
+
+    <div id="blessingWall" class="wall-grid">
+        <p style="text-align:center; width:100%; color:#8d6e63; font-weight:bold; font-size:1.2em;">🧨 正在準備鞭炮載入祝福中... 🧨</p>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+    // 你的 Firebase 設定 (保持原樣)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtL7RByLfXNd19LvF9TfjNSM0hswi6cM0",
+      authDomain: "teacher-blessing-2026.firebaseapp.com",
+      projectId: "teacher-blessing-2026",
+      storageBucket: "teacher-blessing-2026.firebasestorage.app",
+      messagingSenderId: "1042393924724",
+      appId: "1:1042393924724:web:daea78b28a5c694ac27d21",
+      measurementId: "G-S1TDZ8N532"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    
+    const wallDiv = document.getElementById('blessingWall');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingText = document.getElementById('loadingText');
+
+    const q = query(collection(db, "blessings"), orderBy("timestamp", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
+        wallDiv.innerHTML = ""; 
+        if (snapshot.empty) {
+            wallDiv.innerHTML = '<p style="text-align:center; width:100%; color:#8d6e63; font-weight:bold; font-size:1.2em;">🧧 目前還沒有祝福，快來搶頭香發紅包！</p>';
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            renderCard(data);
+        });
+    }, (error) => {
+        console.error("讀取失敗:", error);
+    });
+
+    function renderCard(data) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let mediaHtml = '';
+        if (data.fileUrl) {
+            if (data.fileType && data.fileType.startsWith('video')) {
+                mediaHtml = `<video src="${data.fileUrl}" controls></video>`;
+            } else {
+                mediaHtml = `<img src="${data.fileUrl}" alt="祝福圖片">`;
+            }
+        }
+
+        let dateStr = "剛剛";
+        if (data.timestamp) {
+            dateStr = new Date(data.timestamp.seconds * 1000).toLocaleString();
+        }
+
+        card.innerHTML = `
+            ${mediaHtml}
+            <div class="card-name">${escapeHtml(data.name)}</div>
+            <div class="card-text">${escapeHtml(data.message)}</div>
+            <div class="timestamp">${dateStr}</div>
+        `;
+        wallDiv.appendChild(card);
+    }
+
+    submitBtn.addEventListener('click', async () => {
+        const name = document.getElementById('nameInput').value;
+        const message = document.getElementById('messageInput').value;
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+
+        if (name.trim() === "" || message.trim() === "") {
+            alert("請填寫名字和祝福內容喔！🧨");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "🧨 處理中...";
+        loadingText.style.display = "block";
+
+        try {
+            let fileUrl = "";
+            let fileType = "";
+
+            if (file) {
+                const storageRef = ref(storage, 'blessings/' + Date.now() + '_' + file.name);
+                const snapshot = await uploadBytes(storageRef, file);
+                fileUrl = await getDownloadURL(snapshot.ref);
+                fileType = file.type;
+            }
+
+            await addDoc(collection(db, "blessings"), {
+                name: name,
+                message: message,
+                fileUrl: fileUrl,
+                fileType: fileType,
+                timestamp: serverTimestamp()
+            });
+
+            document.getElementById('nameInput').value = '';
+            document.getElementById('messageInput').value = '';
+            document.getElementById('fileInput').value = '';
+            alert("✨ 祝福發送成功！老師一定會很開心的！ ✨");
+
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            alert("發送失敗，請確認你的網路連線或稍後再試。");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "✨ 發送新年祝福 ✨";
+            loadingText.style.display = "none";
+        }
+    });
+
+    function escapeHtml(text) {
+        if (!text) return "";
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+
+</body>
+</html>
